@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Shipments>
+ {{#each data}}
+  <Shipment>
+    <Action>SAVE</Action>
+    <UserDef1>{{id}}</UserDef1>
+    {{#each shipping_lines as |a|}}
+    <Carrier>
+		{{#compare code "==" "UPS® Ground"}}
+		<Carrier>UPSG</Carrier>
+		{{else}}
+		  {{#compare code "==" "UPS Next Day Air®"}}
+			  <Carrier>UPS1</Carrier>
+		  {{else}}
+			  {{#compare code "==" "UPS® Standard"}}
+				<Carrier>UPST</Carrier>
+			  {{else}}
+				  {{#compare code "==" "UPS 2nd Day Air®"}}
+					  <Carrier>UPS2</Carrier>
+				  {{else}}
+					  {{#compare code "==" "UPS Next Day Air® Early"}}
+							<Carrier>UPS1</Carrier>
+					  {{else}}
+							{{#compare code "==" "UPS Worldwide Expedited®"}}
+								<Carrier>UPEX</Carrier>
+							{{else}}
+								{{#compare code "==" "UPS Worldwide Express Plus®"}}
+									<Carrier>UPEP</Carrier>
+								{{else}}
+									{{#compare code "==" "UPS Worldwide Express®"}}
+										<Carrier>UPES</Carrier>
+									{{else}}
+										{{#compare code "==" "UPS Worldwide Saver®"}}
+											<Carrier>UPSV</Carrier>
+										{{else}}
+											{{#compare code "==" "Free Shipping"}}
+												<Carrier>UPSG</Carrier>
+											{{else}}
+												{{#compare code "==" "Free Shipping (0.0 lb)"}}
+													<Carrier>UPSG</Carrier>
+												{{else}}
+													{{#compare code "==" "Free Exchange Shipping (0.0 lb)"}}
+														<Carrier>UPSG</Carrier>
+													{{else}}
+														{{#compare code "==" "Free Exchange Shipping"}}
+															<Carrier>UPSG</Carrier>
+														{{else}}
+															<Carrier>OTHR</Carrier>
+														{{/compare}}	
+													{{/compare}}
+												{{/compare}}
+											{{/compare}}
+										{{/compare}}
+									{{/compare}}
+								{{/compare}}	
+							{{/compare}}
+					  {{/compare}}
+				  {{/compare}}
+			  {{/compare}}
+		  {{/compare}}      
+		{{/compare}}    
+   <Service></Service>      
+   </Carrier>
+    {{/each}}
+    <Customer>
+      <Company>CAC</Company>
+      <CustomerAddress>
+        <Action>SAVE</Action>
+        <!-- limit Address1 to only 49 characters maximum-->
+        <Address1>{{customer.default_address.address1}}</Address1>
+		<!-- limit Address2 to only 49 characters maximum-->
+        <Address2>{{customer.default_address.address2}}</Address2>
+        <Address3></Address3>
+		<!-- limit AttentionTo to only 49 characters maximum-->        
+        <AttentionTo>{{customer.default_address.company}}</AttentionTo>
+		<!-- limit City to only 29 characters maximum-->        
+        <City>{{customer.default_address.city}}</City>
+        <Consignee></Consignee>
+		<!-- limit Country to only 24 characters maximum-->        
+        <Country>{{customer.default_address.country}}</Country>
+		<!-- limit EmailAddress to only 49 characters maximum-->        
+        <EmailAddress>{{customer.email}}</EmailAddress>
+        <FaxNum></FaxNum>
+		<!-- limit Name to only 49 characters maximum-->        
+        <Name>{{customer.default_address.name}}</Name>
+		<!-- limit PhoneNum to only 49 characters maximum-->        
+        <PhoneNum>{{customer.default_address.phone}}</PhoneNum>
+		<!-- limit PostalCode to only 24 characters maximum-->        
+        <PostalCode>{{customer.default_address.zip}}</PostalCode>
+        <ResidentialFlag></ResidentialFlag>
+		<!-- limit State to only 24 characters maximum-->        
+        <State>{{customer.default_address.province_code}}</State>
+      </CustomerAddress>
+      <Customer>{{customer.id}}</Customer>
+		<!--ShipTo-->
+		<!-- if value is null or empty, hardcode to default catachall value below-->
+        {{#compare shipping_address.name "==" ""}}
+        	<ShipTo>Valued Customer</ShipTo>
+			{{else}}
+				<!--limit to first 24 characters. Don't exceed 24 characters.-->
+		        <ShipTo>{{shipping_address.name}}</ShipTo>
+			{{/compare}}
+      <ShipToAddress>
+        <Action>SAVE</Action>
+		<!--Address1-->
+		<!-- if value is null or empty, hardcode to default catachall value below-->
+        {{#compare shipping_address.address1 "==" ""}}
+        	<Address1>nullAddress1</Address1>
+			{{else}}
+				<!--limit to first 49 characters. Don't exceed 49 characters.-->
+		        <Address1>{{shipping_address.address1}}</Address1>
+			{{/compare}}
+		<!--Address2-->
+		<!-- if value is null or empty, hardcode to default catachall value below: The default catchall is empty since its not a required field.-->
+        {{#compare shipping_address.address2 "==" ""}}
+        	<Address2></Address2>
+			{{else}}
+				<!--limit to first 49 characters. Don't exceed 49 characters.-->
+		        <Address2>{{shipping_address.address2}}</Address2>
+			{{/compare}}
+        <!--Address3-->
+        <Address3></Address3>
+		<!--AttentionTo-->
+        <!-- if value is null or empty, hardcode to default catachall value below: The default catchall is empty since its not a required field.-->
+        {{#compare shipping_address.company "==" ""}}
+        	<AttentionTo></AttentionTo>
+			{{else}}
+				<!--limit to first 49 characters. Don't exceed 49 characters.-->
+		        <AttentionTo>{{shipping_address.company}}</AttentionTo>
+			{{/compare}}
+        <!--City-->
+		<!-- if value is null or empty, hardcode to default catachall value below-->
+        {{#compare shipping_address.city "==" ""}}
+        	<City>nullCity</City>
+			{{else}}
+				<!--limit to first 29 characters. Don't exceed 29 characters.-->
+		        <City>{{shipping_address.city}}</City>
+			{{/compare}}
+        <!--Cosignee-->
+        <Consignee></Consignee>
+        <!--Country-->
+		<!-- if value is null or empty, hardcode to default catachall value below-->
+        {{#compare shipping_address.country_code "==" ""}}
+        	<Country>nullCountry</Country>
+			{{else}}
+				<!--limit to first 24 characters. Don't exceed 24 characters.-->
+		        <Country>{{shipping_address.country_code}}</Country>
+			{{/compare}}
+        <EmailAddress></EmailAddress>
+        <FaxNum></FaxNum>
+        <!--Name-->
+		<!-- if value is null or empty, hardcode to default catachall value below-->
+        {{#compare shipping_address.name "==" ""}}
+        	<Name>Valued Customer</Name>
+			{{else}}
+				<!--limit to first 49 characters. Don't exceed 49 characters.-->
+		        <Name>{{shipping_address.name}}</Name>
+			{{/compare}}
+		<!--PhoneNum-->
+		<!-- if value is null or empty, hardcode to default catachall value below: The default catchall is empty since its not a required field.-->
+        {{#compare shipping_address.phone "==" ""}}
+        	<PhoneNum></PhoneNum>
+			{{else}}
+				<!--limit to first 49 characters. Don't exceed 49 characters.-->
+		        <PhoneNum>{{shipping_address.phone}}</PhoneNum>
+			{{/compare}}
+		<!--PostalCode-->
+		<!-- if value is null or empty, hardcode to default catachall value below-->
+        {{#compare shipping_address.zip "==" ""}}
+        	<PostalCode>nullPostalCode</PostalCode>
+			{{else}}
+				<!--limit to first 24 characters. Don't exceed 24 characters.-->
+		        <PostalCode>{{shipping_address.zip}}</PostalCode>
+			{{/compare}}
+        <ResidentialFlag></ResidentialFlag>
+        <!--State-->
+		<!-- if value is null or empty, hardcode to default catachall value below-->
+        {{#compare shipping_address.province_code "==" ""}}
+        	<State>nullState</State>
+			{{else}}
+				<!--limit to first 24 characters. Don't exceed 24 characters.-->
+		        <State>{{shipping_address.province_code}}</State>
+			{{/compare}}
+      </ShipToAddress>
+    </Customer>
+    <CustomerPO></CustomerPO>
+    <ErpOrder>{{order_number}}</ErpOrder>
+    <OrderDate>{{created_at}}</OrderDate>
+    <OrderType>web</OrderType>
+    <Priority>99</Priority>
+    <ScheduledShipDate>{{created_at}}</ScheduledShipDate>
+    <ShipmentId>{{order_number}}</ShipmentId>
+    <UserDef11>{{note}}</UserDef11>
+    {{#each shipping_lines as |a|}}
+    <UserDef13>{{carrier_identifier}}</UserDef13>
+    <UserDef14>{{code}}</UserDef14>
+    {{/each}}
+    <Warehouse>IRV</Warehouse>
+    <Details>
+     {{#each line_items as |a|}}      
+      {{#compare gift_card "==" false}}
+      <ShipmentDetail>
+        <Action>SAVE</Action>
+        <UserDef4>{{id}}</UserDef4>
+        <ErpOrder>{{../order_number}}</ErpOrder>
+        <ErpOrderLineNum>{{id}}</ErpOrderLineNum>
+        <MarkForAddress>
+          <Action>SAVE</Action>
+        <!--Address1-->
+		<!-- if value is null or empty, hardcode to default catachall value below-->
+        {{#compare ../shipping_address.address1 "==" ""}}
+        	<Address1>nullAddress1</Address1>
+			{{else}}
+				<!--limit to first 49 characters. Don't exceed 49 characters.-->
+		        <Address1>{{../shipping_address.address1}}</Address1>
+			{{/compare}}
+
+                  <!--City-->
+		<!-- if value is null or empty, hardcode to default catachall value below-->
+        {{#compare ../shipping_address.city "==" ""}}
+        	<City>nullCity</City>
+			{{else}}
+				<!--limit to first 29 characters. Don't exceed 29 characters.-->
+		        <City>{{../shipping_address.city}}</City>
+			{{/compare}}
+        <!--Country-->
+		<!-- if value is null or empty, hardcode to default catachall value below-->
+        {{#compare ../shipping_address.country_code "==" ""}}
+        	<Country>nullCountry</Country>
+			{{else}}
+				<!--limit to first 24 characters. Don't exceed 24 characters.-->
+		        <Country>{{../shipping_address.country_code}}</Country>
+			{{/compare}}
+        <!--Name-->
+		<!-- if value is null or empty, hardcode to default catachall value below-->
+        {{#compare ../shipping_address.name "==" ""}}
+        	<Name>Valued Customer</Name>
+			{{else}}
+				<!--limit to first 49 characters. Don't exceed 49 characters.-->
+		        <Name>{{../shipping_address.name}}</Name>
+			{{/compare}}
+		<!--PhoneNum-->
+		<!-- if value is null or empty, hardcode to default catachall value below: The default catchall is empty since its not a required field.-->
+        {{#compare ../shipping_address.phone "==" ""}}
+        	<PhoneNum></PhoneNum>
+			{{else}}
+				<!--limit to first 49 characters. Don't exceed 49 characters.-->
+		        <PhoneNum>{{../shipping_address.phone}}</PhoneNum>
+			{{/compare}}
+		<!--PostalCode-->
+		<!-- if value is null or empty, hardcode to default catachall value below-->
+        {{#compare ../shipping_address.zip "==" ""}}
+        	<PostalCode>nullPostalCode</PostalCode>
+			{{else}}
+				<!--limit to first 24 characters. Don't exceed 24 characters.-->
+		        <PostalCode>{{../shipping_address.zip}}</PostalCode>
+			{{/compare}}
+        <!--State-->
+		<!-- if value is null or empty, hardcode to default catachall value below-->
+        {{#compare ../shipping_address.province_code "==" ""}}
+        	<State>nullState</State>
+			{{else}}
+				<!--limit to first 24 characters. Don't exceed 24 characters.-->
+		        <State>{{../shipping_address.province_code}}</State>
+			{{/compare}}
+        </MarkForAddress>
+        <SKU>
+          <Company>CAC</Company>
+          <Desc>{{name}}</Desc>
+          <Item>{{sku}}</Item>
+          <NetPrice>{{price}}</NetPrice>
+          <Quantity>{{quantity}}</Quantity>
+          <QuantityUm>EA</QuantityUm>
+          <Whs>IRV</Whs>
+        </SKU>
+      </ShipmentDetail>
+      {{/compare}}
+      {{/each}}
+      </Details>
+  </Shipment>
+  {{/each}}
+</Shipments>
