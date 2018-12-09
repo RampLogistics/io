@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Shipments>
+ {{#each data}}
+  <Shipment>
+    <Action>SAVE</Action>
+    <UserDef1>{{id}}</UserDef1>
+    {{#each shipping_lines as |a|}}
+    <Carrier>
+		{{#compare code "==" "Free Canada Standard Shipping - USPS"}}
+		  <Carrier>USPS</Carrier>
+		{{else}}
+		  {{#compare code "==" "Priority Mail International"}}
+			  <Carrier>USPI</Carrier>
+		  {{else}}
+			  {{#compare code "==" "Free Shipping - UPS Ground"}}
+				<Carrier>UPSG</Carrier>
+			  {{else}}
+				  {{#compare code "==" "UPS Next Day Air"}}
+					  <Carrier>UPS1</Carrier>
+				  {{else}}
+					  {{#compare code "==" "UPS Second Day Air"}}
+							<Carrier>UPS2</Carrier>
+					  {{else}}
+							{{#compare code "==" "UPS 2nd Day Air"}}
+								<Carrier>UPS2</Carrier>
+							{{else}}
+								<Carrier>OTHR</Carrier>
+							{{/compare}}
+					  {{/compare}}
+				  {{/compare}}
+			  {{/compare}}
+		  {{/compare}}      
+		{{/compare}}      
+<Service></Service>
+   </Carrier>
+    {{/each}}
+    <Customer>
+      <Company>CUL</Company>
+      <CustomerAddress>
+        <Action>SAVE</Action>
+        <Address1>{{customer.default_address.address1}}</Address1>
+        <Address2>{{customer.default_address.address2}}</Address2>
+        <Address3></Address3>
+        <AttentionTo>{{customer.default_address.company}}</AttentionTo>
+        <City>{{customer.default_address.city}}</City>
+        <Consignee></Consignee>
+        <Country>{{customer.default_address.country}}</Country>
+        <EmailAddress>{{customer.email}}</EmailAddress>
+        <FaxNum></FaxNum>
+        <Name>{{customer.default_address.name}}</Name>
+        <PhoneNum>{{customer.default_address.phone}}</PhoneNum>
+        <PostalCode>{{customer.default_address.zip}}</PostalCode>
+        <ResidentialFlag></ResidentialFlag>
+        <State>{{customer.default_address.province_code}}</State>
+      </CustomerAddress>
+      <Customer>{{customer.id}}</Customer>
+      <ShipTo>{{shipping_address.name}}</ShipTo>
+      <ShipToAddress>
+        <Action>SAVE</Action>
+        <Address1>{{shipping_address.address1}}</Address1>
+        <Address2>{{shipping_address.address2}}</Address2>
+        <Address3></Address3>
+        <AttentionTo>{{shipping_address.company}}</AttentionTo>
+        <City>{{shipping_address.city}}</City>
+        <Consignee></Consignee>
+        <Country>{{shipping_address.country_code}}</Country>
+        <EmailAddress></EmailAddress>
+        <FaxNum></FaxNum>
+        <Name>{{shipping_address.name}}</Name>
+        <PhoneNum>{{shipping_address.phone}}</PhoneNum>
+        <PostalCode>{{shipping_address.zip}}</PostalCode>
+        <ResidentialFlag></ResidentialFlag>
+        <State>{{shipping_address.province_code}}</State>
+      </ShipToAddress>
+    </Customer>
+    <CustomerPO></CustomerPO>
+    <ErpOrder>{{order_number}}</ErpOrder>
+    <OrderDate>{{created_at}}</OrderDate>
+    <OrderType>web</OrderType>
+    <Priority>99</Priority>
+    <RequestedDeliveryDate></RequestedDeliveryDate>
+    <ScheduledShipDate>{{created_at}}</ScheduledShipDate>
+    <ShipmentId>{{order_number}}</ShipmentId>
+    <UserDef11>{{note}}</UserDef11>
+    {{#each shipping_lines as |a|}}
+    <UserDef13>{{carrier_identifier}}</UserDef13>
+    <UserDef14>{{code}}</UserDef14>
+    {{/each}}
+    <Whs>VRN</Whs>
+    <Details>
+     {{#each line_items as |a|}}      
+      {{#compare gift_card "==" false}}
+      <ShipmentDetail>
+        <Action>SAVE</Action>
+        <UserDef4>{{id}}</UserDef4>
+        <ErpOrder>{{../order_number}}</ErpOrder>
+        <ErpOrderLineNum>{{id}}</ErpOrderLineNum>
+        <MarkForAddress>
+          <Action>SAVE</Action>
+          <Address1>{{../shipping_address.address1}}</Address1>
+          <City>{{../shipping_address.city}}</City>
+          <Country>{{../shipping_address.country_code}}</Country>
+          <Name>{{../shipping_address.name}}</Name>
+          <PhoneNum>{{../shipping_address.phone}}</PhoneNum>
+          <PostalCode>{{../shipping_address.zip}}</PostalCode>
+          <State>{{../shipping_address.province_code}}</State>
+        </MarkForAddress>
+        <SKU>
+          <Company>CUL</Company>
+          <Desc>{{name}}</Desc>
+          <Item>{{sku}}</Item>
+          <NetPrice>{{price}}</NetPrice>
+          <Quantity>{{quantity}}</Quantity>
+          <QuantityUm>EA</QuantityUm>
+          <Whs>VRN</Whs>
+        </SKU>
+      </ShipmentDetail>
+      {{/compare}}
+      {{/each}}
+      </Details>
+  </Shipment>
+  {{/each}}
+</Shipments>
